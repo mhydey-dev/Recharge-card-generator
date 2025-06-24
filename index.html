@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="card.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="page-width">
+      <section>
+        <div class="heading">
+          <h1>Recharge card Generator</h1>
+        </div>
+      </section>
+      <section class="Logos">
+        <div onclick="selectNetwork('mtn')" class="mtn-bdd">
+          <img src="mtn-refurb.png" alt="" />
+        </div>
+        <div onclick="selectNetwork('airtel')" class="airtel-bdd">
+          <img src="air-refurb.png" alt="" />
+        </div>
+        <div onclick="selectNetwork('glo')" class="glo-bdd">
+          <img src="glo-logo.jpeg" alt="" />
+        </div>
+        <div onclick="selectNetwork('mobile')" class="mobile-bdd">
+          <img src="9-mobile logo.png" alt="" />
+        </div>
+      </section>
+      <section>
+        <div class="bal-mobile">
+          <div><p>Balance:N2000</p></div>
+          <div><p>9mobile</p></div>
+        </div>
+      </section>
+      <section class="btn-amt">
+        <div><p>50.00</p></div>
+        <div><p>100.00</p></div>
+        <div><p>200.00</p></div>
+        <div><p>500.00</p></div>
+        <div><p>1000.00</p></div>
+        <div><p>2000.00</p></div>
+      </section>
+      <section class="inputs">
+        <div class="num-input">
+          <input type="number" class="first" name="" id="firstinput" />
+        </div>
+        <div class="num-input">
+          <input
+            type="number"
+            class="second"
+            placeholder="*311*#"
+            id="secondinput"
+          />
+        </div>
+      </section>
+      <section class="final-btn">
+        <button onclick="generate()">Generate Card</button>
+        <button>Load Card</button>
+      </section>
+      <section>
+        <div class="Output" id="output"></div>
+      </section>
+    </div>
+  </body>
+</html>
+<script>
+  const firstInput = document.getElementById("firstinput");
+  const secondInput = document.getElementById("secondinput");
+  const Output = document.getElementById(output);
+
+  let network;
+  function selectNetwork(networkSelected) {
+    network = networkSelected;
+  }
+
+  function generate() {
+    let randomNum = Math.ceil(Math.random() * 337788921648);
+    if (network === "mtn") {
+      output.innerHTML += `<div class="Recharge-text">
+            <p>${randomNum} This your Recharge card is for MTN </p>
+          </div>`;
+      output.style.color = "#ffc423";
+    } else if (network === "airtel") {
+      output.innerHTML += `<div class="Recharge-text">
+            <p>${randomNum} This your Recharge card is for AIRTEL </p>
+          </div>`;
+      output.style.color = "#f60a0b";
+    } else if (network === "glo") {
+      output.innerHTML += `<div class="Recharge-text">
+            <p>${randomNum} This your Recharge card is for GLO</p>
+          </div>`;
+      output.style.color = "#50b653";
+    } else if (network === "mobile") {
+      output.innerHTML += `<div class="Recharge-text">
+            <p>${randomNum} This your Recharge card is for 9-MOBILE</p>
+          </div>`;
+      output.style.color = "#006f54";
+    } else {
+      alert("Kindly Select a Netwok");
+    }
+  }
+</script>

@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.page-width {
+  margin: auto;
+  width: 800px;
+  max-width: calc(100% - 40px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+.heading h1 {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  font-size: 30px;
+  font-weight: 500;
+  color: aqua;
+}
+.Logos {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+.Logos img {
+  width: 80px;
+  height: 70px;
+  padding: 2px;
+}
+.mtn-bdd {
+  border: 15px solid #ffc423;
+  border-radius: 10px;
+}
+.airtel-bdd {
+  border: 15px solid #f60a0b;
+  border-radius: 10px;
+}
+.glo-bdd {
+  border: 15px solid #50b653;
+  border-radius: 10px;
+}
+.mobile-bdd {
+  border: 15px solid #006f54;
+  border-radius: 10px;
+}
+.bal-mobile {
+  height: 40px;
+  background-color: red;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 5px;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+}
+.bal-mobile p {
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+}
+.btn-amt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-left: 40px;
+}
+
+.btn-amt > div {
+  width: 230px;
+  height: 40px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+.inputs {
+  display: flex;
+  gap: 5px;
+  padding-bottom: 20px;
+}
+.num-input {
+  margin: auto;
+}
+.first {
+  width: 350px;
+  outline: none;
+  padding-left: 10px;
+}
+.second {
+  width: 350px;
+  outline: none;
+  padding-left: 10px;
+}
+Input::-webkit-outer-spin-button,
+Input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.final-btn {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  padding-bottom: 20px;
+}
+.final-btn > button {
+  width: 120px;
+  height: 30px;
+  background-color: #006f54;
+  color: white;
+  font-size: 15px;
+  border-radius: 8px;
+}
+.Output {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+.Recharge-text {
+  font-size: 33px;
+  background-color: black;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
