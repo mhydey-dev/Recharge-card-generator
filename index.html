@@ -46,17 +46,12 @@
           <input type="number" class="first" name="" id="firstinput" />
         </div>
         <div class="num-input">
-          <input
-            type="number"
-            class="second"
-            placeholder="*311*#"
-            id="secondinput"
-          />
+          <input type="number" class="second" id="secondinput" />
         </div>
       </section>
       <section class="final-btn">
         <button onclick="generate()">Generate Card</button>
-        <button>Load Card</button>
+        <button onclick="loader()">Load Card</button>
       </section>
       <section>
         <div class="Output" id="output"></div>
@@ -73,31 +68,44 @@
   function selectNetwork(networkSelected) {
     network = networkSelected;
   }
+  let card = "";
+  for (let i = 0; i < 12; i++) {
+    let randnum = Math.floor(Math.random() * 10);
+    card += randnum;
+  }
 
   function generate() {
-    let randomNum = Math.ceil(Math.random() * 337788921648);
     if (network === "mtn") {
       output.innerHTML += `<div class="Recharge-text">
-            <p>${randomNum} This your Recharge card is for MTN </p>
+            <p>${card} This your Recharge card is for MTN </p>
           </div>`;
       output.style.color = "#ffc423";
     } else if (network === "airtel") {
       output.innerHTML += `<div class="Recharge-text">
-            <p>${randomNum} This your Recharge card is for AIRTEL </p>
+            <p>${card} This your Recharge card is for AIRTEL </p>
           </div>`;
       output.style.color = "#f60a0b";
     } else if (network === "glo") {
       output.innerHTML += `<div class="Recharge-text">
-            <p>${randomNum} This your Recharge card is for GLO</p>
+            <p>${card} This your Recharge card is for GLO</p>
           </div>`;
       output.style.color = "#50b653";
     } else if (network === "mobile") {
       output.innerHTML += `<div class="Recharge-text">
-            <p>${randomNum} This your Recharge card is for 9-MOBILE</p>
+            <p>${card} This your Recharge card is for 9-MOBILE</p>
           </div>`;
       output.style.color = "#006f54";
     } else {
       alert("Kindly Select a Netwok");
+    }
+  }
+  function loader() {
+    if (secondInput.value.trim() === card) {
+      alert("Congratulations! you just toppped up your Account");
+    } else if (!secondInput.value.trim()) {
+      alert("Enter a valid 12-digits else you get barred after 3 trials");
+    } else {
+      alert("Wrong digits! you have 2 trials left");
     }
   }
 </script>
