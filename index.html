@@ -28,22 +28,28 @@
         </div>
       </section>
       <section>
-        <div class="bal-mobile">
-          <div><p>Balance:N2000</p></div>
-          <div><p>9mobile</p></div>
+        <div class="bal-mobile" id="bal-mobile">
+          <div><p id="balance">Balance: N0</p></div>
+          <div><p id="network">MTN</p></div>
         </div>
       </section>
       <section class="btn-amt">
-        <div><p>50.00</p></div>
-        <div><p>100.00</p></div>
-        <div><p>200.00</p></div>
-        <div><p>500.00</p></div>
-        <div><p>1000.00</p></div>
-        <div><p>2000.00</p></div>
+        <div onclick="selectAmount(50)"><p>50.00</p></div>
+        <div onclick="selectAmount(100)"><p>100.00</p></div>
+        <div onclick="selectAmount(200)"><p>200.00</p></div>
+        <div onclick="selectAmount(500)"><p>500.00</p></div>
+        <div onclick="selectAmount(1000)"><p>1000.00</p></div>
+        <div onclick="selectAmount(2000)"><p>2000.00</p></div>
       </section>
       <section class="inputs">
         <div class="num-input">
-          <input type="number" class="first" name="" id="firstinput" />
+          <input
+            type="number"
+            class="first"
+            name=""
+            value="50"
+            id="firstinput"
+          />
         </div>
         <div class="num-input">
           <input type="number" class="second" id="secondinput" />
@@ -54,7 +60,21 @@
         <button onclick="loader()">Load Card</button>
       </section>
       <section>
-        <div class="Output" id="output"></div>
+        <div class="output" id="output"></div>
+      </section>
+      <section>
+        <table>
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>Provider</th>
+              <th>Used</th>
+              <th>Amount</th>
+              <th>PIN</th>
+            </tr>
+          </thead>
+          <tbody id="cards-table"></tbody>
+        </table>
       </section>
     </div>
   </body>
@@ -62,19 +82,86 @@
 <script>
   const firstInput = document.getElementById("firstinput");
   const secondInput = document.getElementById("secondinput");
-  const Output = document.getElementById(output);
+  const output = document.getElementById("output");
 
-  let network;
+  let network = "mtn";
+  let profile = {
+    mtn: {
+      name: "MTN",
+      balance: 0,
+      color: "#ffc423",
+    },
+    airtel: {
+      name: "AIRTEL",
+      balance: 0,
+      color: "#f60a0b",
+    },
+    glo: {
+      name: "GLO",
+      balance: 0,
+      color: "#50b653",
+    },
+    mobile: {
+      name: "9Mobile",
+      balance: 0,
+      color: "#006f54",
+    },
+    cards: [],
+  };
+
   function selectNetwork(networkSelected) {
     network = networkSelected;
+    changeProfile();
   }
-  let card = "";
-  for (let i = 0; i < 12; i++) {
-    let randnum = Math.floor(Math.random() * 10);
-    card += randnum;
+
+  function selectAmount(amountSelected) {
+    firstInput.value = amountSelected;
+  }
+
+  function changeProfile() {
+    const uiBalMobile = document.getElementById("bal-mobile");
+    const uiBalance = document.getElementById("balance");
+    const uiNetwork = document.getElementById("network");
+
+    uiBalance.innerText = `Balance: N${profile[network].balance}`;
+    uiBalMobile.style.backgroundColor = profile[network].color;
+    uiNetwork.innerText = profile[network].name;
+  }
+
+  function showCards() {
+    const uiCardsTable = document.getElementById("cards-table");
+
+    uiCardsTable.innerHTML = "";
+
+    for (let index = 0; index < profile.cards.length; index++) {
+      const rechargeCard = profile.cards[index];
+
+      uiCardsTable.innerHTML += `
+        <tr>
+          <td>${rechargeCard.serialNo}</td>
+          <td>${profile[rechargeCard.network].name}</td>
+          <td>${rechargeCard.isUsed}</td>
+          <td>${rechargeCard.amount}</td>
+          <td>${rechargeCard.pin}</td>
+        </tr>
+      `;
+    }
   }
 
   function generate() {
+    if (!firstInput.value) {
+      alert("Enter a valid amount");
+      return;
+    }
+
+    const amount = Number(firstInput.value);
+
+    let card = "";
+    for (let i = 0; i < 12; i++) {
+      let randnum = Math.floor(Math.random() * 10);
+      card += randnum;
+    }
+
     if (network === "mtn") {
       output.innerHTML += `<div class="Recharge-text">
             <p>${card} This your Recharge card is for MTN </p>
@@ -98,14 +185,56 @@
     } else {
       alert("Kindly Select a Netwok");
     }
+
+    setTimeout(() => {
+      output.innerHTML = "";
+    }, 2000);
+
+    profile.cards.push({
+      serialNo: profile.cards.length + 1,
+      network: network,
+      isUsed: false,
+      amount: amount,
+      pin: card,
+    });
+
+    showCards();
   }
+
   function loader() {
-    if (secondInput.value.trim() === card) {
-      alert("Congratulations! you just toppped up your Account");
-    } else if (!secondInput.value.trim()) {
-      alert("Enter a valid 12-digits else you get barred after 3 trials");
+    const pin = Number(secondInput.value);
+
+    if (String(pin).length != 12) {
+      alert("Enter 12 valid digits!");
+      return;
+    }
+
+    const cardIndex = profile.cards.findIndex((card) => card.pin == pin);
+
+    if (network != profile.cards[cardIndex].network) {
+      alert("Wrong network");
+      return;
+    }
+
+    if (cardIndex == -1) {
+      alert("Card not found");
+      return;
+    }
+
+    if (profile.cards[cardIndex].isUsed) {
+      alert("Card has been used");
     } else {
-      alert("Wrong digits! you have 2 trials left");
+      profile[profile.cards[cardIndex].network].balance +=
+        profile.cards[cardIndex].amount;
+
+      profile.cards[cardIndex].isUsed = true;
+
+      changeProfile();
+      showCards();
+
+      alert("Recharge successful");
     }
   }
+
+  showCards();
 </script>
