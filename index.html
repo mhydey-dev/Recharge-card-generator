@@ -52,12 +52,17 @@
           />
         </div>
         <div class="num-input">
-          <input type="number" class="second" id="secondinput" />
+          <input type="text" class="second" id="secondinput" />
         </div>
       </section>
       <section class="final-btn">
         <button onclick="generate()">Generate Card</button>
         <button onclick="loader()">Load Card</button>
+      </section>
+      <section class="final-btn">
+        <button onclick="selectFilter('all')">All cards</button>
+        <button onclick="selectFilter('used')">Used Cards</button>
+        <button onclick="selectFilter('unused')">Unused Cards</button>
       </section>
       <section>
         <div class="output" id="output"></div>
@@ -85,7 +90,8 @@
   const output = document.getElementById("output");
 
   let network = "mtn";
-  let profile = {
+  let filter = "all";
+  let profile = JSON.parse(localStorage.getItem("profile")) || {
     mtn: {
       name: "MTN",
       balance: 0,
@@ -132,9 +138,17 @@
     const uiCardsTable = document.getElementById("cards-table");
 
     uiCardsTable.innerHTML = "";
+    let filteredCards = [];
+    if (filter == "all") {
+      filteredCards = profile.cards;
+    } else if (filter == "used") {
+      filteredCards = profile.cards.filter((card) => card.isUsed);
+    } else {
+      filteredCards = profile.cards.filter((card) => !card.isUsed);
+    }
 
-    for (let index = 0; index < profile.cards.length; index++) {
-      const rechargeCard = profile.cards[index];
+    for (let index = 0; index < filteredCards.length; index++) {
+      const rechargeCard = filteredCards[index];
 
       uiCardsTable.innerHTML += `
         <tr>
@@ -197,17 +211,23 @@
       amount: amount,
       pin: card,
     });
+    localStorage.setItem("profile", JSON.stringify(profile));
 
     showCards();
   }
 
   function loader() {
-    const pin = Number(secondInput.value);
+    const pinstr = secondInput.value;
 
-    if (String(pin).length != 12) {
+    if (pinstr.length != 18) {
       alert("Enter 12 valid digits!");
       return;
     }
+    if (!pinstr.startsWith("*311*") || !pinstr.endsWith("#")) {
+      alert("Invalid");
+      return;
+    }
+    const pin = Number(pinstr.replace("*311*", "").replace("#", ""));
 
     const cardIndex = profile.cards.findIndex((card) => card.pin == pin);
 
@@ -228,6 +248,7 @@
         profile.cards[cardIndex].amount;
 
       profile.cards[cardIndex].isUsed = true;
+      localStorage.setItem("profile", JSON.stringify(profile));
 
       changeProfile();
       showCards();
@@ -235,6 +256,9 @@
       alert("Recharge successful");
     }
   }
-
+  function selectFilter(filterSelected) {
+    filter = filterSelected;
+    showCards();
+  }
   showCards();
 </script>
